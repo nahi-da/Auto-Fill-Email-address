@@ -1,0 +1,24 @@
+{
+  "extensionName": {
+    "message": "Autofill mailaddr",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Auto-fill email address.",
+    "description": "Description of the extension."
+  },
+
+  "optionTitle": {
+    "message": "Saved Email Addresses"
+  },
+  "addButton": {
+    "message": "Add"
+  },
+  "removeButton": {
+    "message": "Remove"
+  },
+  "duplicateWarning": {
+    "message": "This email address is already registered."
+  }
+}
