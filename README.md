@@ -24,7 +24,8 @@ Autofill Email address は、ウェブフォームなどで頻繁に使用する
 
 ![rec3](.github/rec3.gif)
 
-> 登録したメールアドレスはオプションで並び替えが可能です。
+登録したメールアドレスはオプションで並び替えが可能です。<br>
+SortableJSを使用してます。
 
 ![rec1](.github/rec1.gif)
 
