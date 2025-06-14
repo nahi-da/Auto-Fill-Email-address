@@ -60,6 +60,7 @@ function createSuggestionBox(input, emails) {
         item.addEventListener('click', () => {
             input.value = email;
             input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true}));
             removeSuggestionBox();
         });
         suggestionBox.appendChild(item);
@@ -83,22 +84,42 @@ function removeSuggestionBox() {
     }
 }
 
+function focusEvent(inputElem) {
+    browser.storage.local.get('emailList').then(result => {
+        const list = result.emailList || [];
+        if (list.length > 0) {
+            createSuggestionBox(inputElem, list);
+        }
+    });
+}
+
 // ページ内のメールアドレス欄を監視して補完表示
 function attachListenersToEmailInputs() {
-    const inputs = document.querySelectorAll('input[type="email"]');
-    inputs.forEach(input => {
-        input.addEventListener('focus', () => {
-            browser.storage.local.get('emailList').then(result => {
-                const list = result.emailList || [];
-                if (list.length > 0) {
-                    createSuggestionBox(input, list);
-                }
+    // dummyを作ることで動的なページで要素をクリアするようなサイトにも対応
+    // jsで変数によるフラグ管理を行うと、動的なページで動作しない可能性がある
+    const dummy = document.getElementById('autofill-dummyelem');
+    if (dummy === null) {
+        const dummy_elem = document.createElement('div');
+        dummy_elem.id = 'autofill-dummyelem';
+        dummy_elem.style.visibility = 'hidden';
+        document.body.appendChild(dummy_elem);
+        const inputs = document.querySelectorAll('input[type="email"]');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                focusEvent(input);
             });
+            input.addEventListener('blur', () => {
+                setTimeout(removeSuggestionBox, 200); // クリック後に消す猶予
+            });
+            input.addEventListener('click', () => {
+                focusEvent(input);
+            })
         });
-        input.addEventListener('blur', () => {
-            setTimeout(removeSuggestionBox, 200); // クリック後に消す猶予
-        });
-    });
+    }
+    const activeElem = document.activeElement;
+    if (activeElem && activeElem.tagName === 'input' && activeElem.type === 'email') {
+        focusEvent(activeElem);
+    }
 }
 
 // 初回 + 動的要素にも対応
