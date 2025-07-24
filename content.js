@@ -93,6 +93,14 @@ function focusEvent(inputElem) {
     });
 }
 
+function isEmailInput(elem) {
+    const type = elem.getAttribute('type');
+    const name = elem.getAttribute('name');
+    if (type !== null && type === 'email') return true;
+    if (name !== null && name.toLowerCase().includes('mail')) return true;
+    return false;
+}
+
 // ページ内のメールアドレス欄を監視して補完表示
 function attachListenersToEmailInputs() {
     // dummyを作ることで動的なページで要素をクリアするようなサイトにも対応
@@ -103,21 +111,23 @@ function attachListenersToEmailInputs() {
         dummy_elem.id = 'autofill-dummyelem';
         dummy_elem.style.visibility = 'hidden';
         document.body.appendChild(dummy_elem);
-        const inputs = document.querySelectorAll('input[type="email"]');
+        const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                focusEvent(input);
-            });
-            input.addEventListener('blur', () => {
-                setTimeout(removeSuggestionBox, 200); // クリック後に消す猶予
-            });
-            input.addEventListener('click', () => {
-                focusEvent(input);
-            })
+            if (isEmailInput(input)) {
+                input.addEventListener('focus', () => {
+                    focusEvent(input);
+                });
+                input.addEventListener('blur', () => {
+                    setTimeout(removeSuggestionBox, 200); // クリック後に消す猶予
+                });
+                input.addEventListener('click', () => {
+                    focusEvent(input);
+                });
+            }
         });
     }
     const activeElem = document.activeElement;
-    if (activeElem && activeElem.tagName === 'input' && activeElem.type === 'email') {
+    if (activeElem.getElementsByTagName() === 'input' && isEmailInput(activeElem)) {
         focusEvent(activeElem);
     }
 }
