@@ -1,6 +1,10 @@
 # Autofill Email address (Firefox Extension)
 
-Autofill Email address は、ウェブフォームなどで頻繁に使用するメールアドレスの入力をサポートする Firefox 拡張機能です。複数のメールアドレスを保存し、候補から選択することで素早く入力することができます。新規登録を行う際に便利なツールです。
+メールアドレスの入力を補助する拡張機能です。<br>
+アカウント作成時などにメールアドレスの入力が必要な場合、拡張機能の設定で登録したメールアドレスが候補として、入力欄の上部にポップアップ表示されます。
+
+Assists you in entering your email address.<br>
+When you need to enter your email address—for example, when creating a new account—email addresses saved in the extension settings will appear as suggestions in a popup above the input field.
 
 ![rec2.gif](.github/rec2.gif)
 
