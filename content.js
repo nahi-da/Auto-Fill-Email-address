@@ -96,8 +96,25 @@ function focusEvent(inputElem) {
 function isEmailInput(elem) {
     const type = elem.getAttribute('type');
     const name = elem.getAttribute('name');
-    if (type !== null && type === 'email') return true;
-    if (name !== null && name.toLowerCase().includes('mail')) return true;
+    const id = elem.getAttribute('id');
+    const autocomplete = elem.getAttribute('autocomplete');
+    const placeholder = elem.getAttribute('placeholder');
+    const inputmode = elem.getAttribute('inputmode');
+    const ariaLabel = elem.getAttribute('aria-label');
+    const className = elem.className;
+
+    if (type !== null && type.toLowerCase() === 'email') return true;
+    if (name !== null && (name.toLowerCase().includes('mail') || name.toLowerCase().includes('username'))) return true;
+    if (id !== null && (id.toLowerCase().includes('mail') || id.toLowerCase().includes('username'))) return true;
+    if (autocomplete !== null && (autocomplete.toLowerCase().includes('email') || autocomplete.toLowerCase().includes('username'))) return true;
+    if (placeholder !== null && (placeholder.toLowerCase().includes('mail') || placeholder.toLowerCase().includes('username'))) return true;
+    if (inputmode !== null && inputmode.toLowerCase() === 'email') return true;
+    if (ariaLabel !== null && (ariaLabel.toLowerCase().includes('mail') || ariaLabel.toLowerCase().includes('username'))) return true;
+    if (className && (className.toLowerCase().includes('mail') || className.toLowerCase().includes('username'))) return true;
+    if (elem.hasAttribute('data-email') || elem.hasAttribute('data-mail') || elem.hasAttribute('data-username')) return true;
+
+    // ラベル要素のテキストも判定材料にする場合は追加実装が必要
+
     return false;
 }
 
@@ -127,7 +144,7 @@ function attachListenersToEmailInputs() {
         });
     }
     const activeElem = document.activeElement;
-    if (activeElem.getElementsByTagName() === 'input' && isEmailInput(activeElem)) {
+    if (activeElem && activeElem.tagName === 'INPUT' && isEmailInput(activeElem)) {
         focusEvent(activeElem);
     }
 }
@@ -140,3 +157,12 @@ observer.observe(document.body, { childList: true, subtree: true });
 
 // 初期実行
 attachListenersToEmailInputs();
+
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "showSuggestions") {
+        const active = document.activeElement;
+        if (active && active.tagName === "INPUT") {
+            focusEvent(active);
+        }
+    }
+});
