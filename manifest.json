@@ -3,7 +3,7 @@
     "name": "__MSG_extensionName__",
     "description": "__MSG_extensionDescription__",
     "default_locale": "ja",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "permissions": ["tabs", "activeTab", "storage", "contextMenus"],
     "background": {
         "scripts": ["background.js"]
